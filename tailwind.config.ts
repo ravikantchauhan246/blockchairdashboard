@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,26 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				crypto: {
+					'bitcoin': '#f7931a',
+					'ethereum': '#627eea',
+					'aptos': '#2ed8a7',
+					'arbitrum': '#96bedc',
+					'avalanche': '#e84142',
+					'base': '#0052ff',
+					'beacon': '#9b6bff',
+					'bitcoin-cash': '#8dc351'
+				},
+				gradients: {
+					'bitcoin': 'linear-gradient(135deg, #171717 0%, #292929 100%)',
+					'ethereum': 'linear-gradient(135deg, #1a1d35 0%, #283366 100%)',
+					'aptos': 'linear-gradient(135deg, #2e0d42 0%, #4b1466 100%)',
+					'arbitrum': 'linear-gradient(135deg, #1d1f2b 0%, #2d303f 100%)',
+					'avalanche': 'linear-gradient(135deg, #2b1515 0%, #3d1f1f 100%)',
+					'base': 'linear-gradient(135deg, #0a1428 0%, #152a4d 100%)',
+					'beacon': 'linear-gradient(135deg, #1e1242 0%, #321c6b 100%)',
+					'bitcoin-cash': 'linear-gradient(135deg, #1c2011 0%, #2d351c 100%)'
 				}
 			},
 			borderRadius: {
@@ -84,11 +105,16 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
 			}
 		}
 	},
