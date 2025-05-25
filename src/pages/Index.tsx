@@ -4,6 +4,7 @@ import CryptoGrid from "@/components/CryptoGrid";
 import APIStatus from "@/components/APIStatus";
 import useCryptoData from "@/hooks/useCryptoData";
 import { useToast } from "@/hooks/use-toast";
+import { LineShadowText } from "@/components/magicui/line-shadow-text";
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
@@ -30,11 +31,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient py-8 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            Blockchain Explorer
+      <div className="max-w-7xl mx-auto">        <header className="mb-8">
+          <h1 className="text-xl md:text-7xl font-bold text-white mb-2 italic ">
+            <LineShadowText shadowColor="#ffffff">Blockchain</LineShadowText> <span className="not-italic">Explorer</span>
           </h1>
+          
           <p className="text-gray-400">
             Real-time data from major cryptocurrency blockchains
           </p>
