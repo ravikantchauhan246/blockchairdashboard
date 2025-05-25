@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
@@ -29,6 +30,35 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
   change24h,
   transactions24h,
 }) => {
+  const navigate = useNavigate();
+    // Map display names to URL paths
+  const getBlockchainPath = (name: string) => {
+    const pathMap: { [key: string]: string } = {
+      'Bitcoin': 'bitcoin',
+      'Bitcoin Cash': 'bitcoin-cash',
+      'Ethereum': 'ethereum',
+      'Litecoin': 'litecoin',
+      'Dogecoin': 'dogecoin',
+      'Cardano': 'cardano',
+      'Polkadot': 'polkadot',
+      'Ripple': 'ripple',
+      'XRP': 'ripple', // XRP maps to ripple endpoint
+      'XRP Ledger': 'ripple', // Alternative name for Ripple
+      'Stellar': 'stellar',
+      'Monero': 'monero',
+      'Dash': 'dash',
+      'Zcash': 'zcash',
+      'eCash': 'ecash',
+      'Groestlcoin': 'groestlcoin',
+      'Kusama': 'kusama'
+    };
+    return pathMap[name] || name.toLowerCase().replace(/\s+/g, '-');
+  };
+
+  const handleCardClick = () => {
+    const path = getBlockchainPath(name);
+    navigate(`/${path}`);
+  };
   // Convert the block time to a human-readable format
   const timeAgo = formatDistanceToNow(blockTime, { addSuffix: true });
   
@@ -91,29 +121,34 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
     
     const colors = colorMap[cryptoName.toLowerCase()] || { primary: '#6b7280', secondary: '#9ca3af' }; // gray-500, gray-400
     return colors;
-  };
-  const borderColors = getBorderBeamColors(name);
-    return (
-    <CardContainer className="inter-var w-full" containerClassName="py-1">
-      <CardBody className={`crypto-card relative group/card rounded-xl p-4 ${gradientClass} text-white overflow-hidden border border-white/[0.1] hover:shadow-2xl hover:shadow-emerald-500/[0.1] w-full h-full`}>        <CardItem translateZ="80" rotateX={5} rotateY={5} className="flex items-center justify-between mb-3">
+  };  const borderColors = getBorderBeamColors(name);    return (
+    <div 
+      className="cursor-pointer transition-all duration-700 ease-out hover:scale-110"
+      onClick={handleCardClick}
+      style={{ 
+        transition: 'transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+      }}
+    >
+      <CardContainer className="inter-var w-full" containerClassName="py-1">
+        <CardBody className={`crypto-card relative group/card rounded-xl p-4 ${gradientClass} text-white overflow-hidden border border-white/[0.1] hover:shadow-2xl hover:shadow-emerald-500/[0.1] w-full h-full transition-all duration-700`}>        <CardItem translateZ="100" rotateX={8} rotateY={8} className="flex items-center justify-between mb-3 transition-all duration-500 group-hover:translateZ-120">
           <div className="flex items-center">
-            <CardItem translateZ="95" className={`w-8 h-8 rounded-full flex items-center justify-center ${iconClass} bg-opacity-20 mr-2`}>
+            <CardItem translateZ="120" rotateX={10} rotateY={10} className={`w-8 h-8 rounded-full flex items-center justify-center ${iconClass} bg-opacity-20 mr-2 transition-all duration-500 group-hover:translateZ-140 group-hover:rotateY-15`}>
               {/* This is where you would put the icon, for now using the first letter */}
               <span className="text-lg font-bold">{symbol.charAt(0)}</span>
             </CardItem>
             <div>
-              <CardItem translateZ="80" as="h3" className="text-lg font-bold">{name}</CardItem>
-              <CardItem translateZ="80" as="p" className="text-gray-300 text-sm">{symbol}</CardItem>
+              <CardItem translateZ="100" rotateX={5} rotateY={5} as="h3" className="text-lg font-bold transition-all duration-500 group-hover:translateZ-120">{name}</CardItem>
+              <CardItem translateZ="90" rotateX={3} rotateY={3} as="p" className="text-gray-300 text-sm transition-all duration-500 group-hover:translateZ-110">{symbol}</CardItem>
             </div>
           </div>
           <div className="text-right">
-            <CardItem translateZ="90" as="p" className="text-base font-bold">{formattedPrice}</CardItem>
-            <CardItem translateZ="50" as="p" className={`text-xs ${changeColor}`}>{formattedChange24h}</CardItem>
+            <CardItem translateZ="110" rotateX={6} rotateY={6} as="p" className="text-base font-bold transition-all duration-500 group-hover:translateZ-130">{formattedPrice}</CardItem>
+            <CardItem translateZ="80" rotateX={4} rotateY={4} as="p" className={`text-xs ${changeColor} transition-all duration-500 group-hover:translateZ-120`}>{formattedChange24h}</CardItem>
           </div>
         </CardItem>
         
-        <CardItem translateZ="10" className="grid grid-cols-2 gap-3 text-xs">
-          <CardItem translateZ="30" className="space-y-1">
+        <CardItem translateZ="20" rotateX={2} rotateY={2} className="grid grid-cols-2 gap-3 text-xs transition-all duration-500 group-hover:translateZ-40">
+          <CardItem translateZ="40" rotateX={4} rotateY={4} className="space-y-1 transition-all duration-500 group-hover:translateZ-60">{" "}
             <p className="text-gray-400">{blockLabel}</p>
             <p className="font-medium text-sm">{formattedBlockNumber}</p>
             <p className="text-xs text-gray-300">{timeAgo}</p>
@@ -134,8 +169,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
             <p className="font-medium text-sm">{formattedTransactions24h}</p>
           </CardItem>
         </CardItem>
-        
-        {/* Animated border beams with cryptocurrency-specific colors */}
+          {/* Animated border beams with cryptocurrency-specific colors */}
         <BorderBeam
           duration={5}
           size={100}
@@ -144,6 +178,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
         />
       </CardBody>
     </CardContainer>
+    </div>
   );
 };
 
