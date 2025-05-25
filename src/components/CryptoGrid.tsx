@@ -10,7 +10,13 @@ interface Cryptocurrency {
   price: number;
   blockNumber: number;
   blockTime: Date;
+  blockLabel?: string;
   fee: number;
+  marketCap?: number;
+  dominance?: number;
+  change24h?: number;
+  volume24h?: number;
+  transactions24h?: number;
 }
 
 interface CryptoGridProps {
@@ -44,8 +50,7 @@ const CryptoGrid: React.FC<CryptoGridProps> = ({ cryptocurrencies, isLoading }) 
             </div>
           </div>
         ))
-      ) : (
-        cryptocurrencies.map((crypto) => (
+      ) : (        cryptocurrencies.map((crypto) => (
           <CryptoCard
             key={crypto.id}
             name={crypto.name}
@@ -53,7 +58,11 @@ const CryptoGrid: React.FC<CryptoGridProps> = ({ cryptocurrencies, isLoading }) 
             price={crypto.price}
             blockNumber={crypto.blockNumber}
             blockTime={crypto.blockTime}
+            blockLabel={crypto.blockLabel}
             fee={crypto.fee}
+            marketCap={crypto.marketCap}
+            change24h={crypto.change24h}
+            transactions24h={crypto.transactions24h}
           />
         ))
       )}

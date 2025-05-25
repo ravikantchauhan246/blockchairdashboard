@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { fetchAllCryptoData, parseCryptoData } from '../services/blockchairApi';
+import { fetchAllCryptoData, parseMultipleCryptoData } from '../services/blockchairApi';
 
 interface CryptoData {
   id: string;
@@ -9,7 +9,13 @@ interface CryptoData {
   price: number;
   blockNumber: number;
   blockTime: Date;
+  blockLabel?: string;
   fee: number;
+  marketCap?: number;
+  dominance?: number;
+  change24h?: number;
+  volume24h?: number;
+  transactions24h?: number;
 }
 
 const MOCK_DATA: CryptoData[] = [
@@ -96,43 +102,85 @@ export const useCryptoData = (activeFilter: string) => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-      
-      try {
-        // For now, we'll use mock data to match the design
-        // In a production app, we would use the API data
-        // const results = await fetchAllCryptoData();
-        // const parsedData = results.map(parseCryptoData).filter(Boolean);
-        // setCryptoData(parsedData);
+        try {
+        // Fetch real data from Blockchair API
+        const results = await fetchAllCryptoData();
+        const parsedData = parseMultipleCryptoData(results);
         
-        // Using mock data for demo purposes
-        setTimeout(() => {
-          // Filter the mock data based on activeFilter
-          let filteredData = MOCK_DATA;
+        // Apply filtering based on activeFilter
+        let filteredData = parsedData;
           if (activeFilter === 'bitcoin') {
-            filteredData = MOCK_DATA.filter(crypto => crypto.id === 'bitcoin' || crypto.id === 'bitcoin-cash');
-          } else if (activeFilter === 'ethereum') {
-            filteredData = MOCK_DATA.filter(crypto => 
-              crypto.id === 'ethereum' || 
-              crypto.id === 'base' || 
-              crypto.id === 'beacon' || 
-              crypto.id === 'arbitrum'
-            );
+          // Show Bitcoin and Bitcoin-like blockchains
+          filteredData = parsedData.filter(crypto => 
+            ['bitcoin', 'bitcoin-cash', 'litecoin', 'dogecoin', 'dash', 'zcash', 
+             'ecash', 'groestlcoin'].includes(crypto.id)
+          );
+        } else if (activeFilter === 'ethereum') {
+          // Show Ethereum (only Ethereum is available from Blockchair)
+          filteredData = parsedData.filter(crypto => 
+            ['ethereum'].includes(crypto.id)
+          );
+        } else if (activeFilter === 'defi') {
+          // Show DeFi and smart contract platforms
+          filteredData = parsedData.filter(crypto => 
+            ['ethereum', 'cardano', 'polkadot', 'kusama'].includes(crypto.id)
+          );
+        } else if (activeFilter === 'privacy') {
+          // Show privacy-focused cryptocurrencies
+          filteredData = parsedData.filter(crypto => 
+            ['monero', 'zcash', 'dash'].includes(crypto.id)
+          );
+        } else if (activeFilter === 'all') {
+          // Show all available cryptocurrencies - no filtering
+          filteredData = parsedData;
+        } else {
+          // For any other filter, show all
+          filteredData = parsedData;
+        }
+        
+        // Sort by market cap (descending) for better display order
+        filteredData.sort((a, b) => {
+          // Handle cases where market cap might be undefined
+          const aMarketCap = a.marketCap || 0;
+          const bMarketCap = b.marketCap || 0;
+          if (aMarketCap === bMarketCap) {
+            // If market caps are equal, sort by price
+            return (b.price || 0) - (a.price || 0);
           }
-          
-          setCryptoData(filteredData);
-          setIsLoading(false);
-        }, 1000); // Simulate API delay
+          return bMarketCap - aMarketCap;
+        });
+        
+        console.log(`Fetched ${filteredData.length} cryptocurrencies for filter: ${activeFilter}`);
+        setCryptoData(filteredData);
+        setIsLoading(false);
       } catch (err) {
         console.error('Error fetching crypto data:', err);
         setError('Failed to fetch cryptocurrency data. Please try again later.');
         setIsLoading(false);
+        
+        // Fallback to a subset of mock data if API fails
+        const fallbackData = MOCK_DATA.slice(0, 8); // Show fewer items as fallback
+        
+        let filteredFallback = fallbackData;
+        if (activeFilter === 'bitcoin') {
+          filteredFallback = fallbackData.filter(crypto => crypto.id === 'bitcoin' || crypto.id === 'bitcoin-cash');
+        } else if (activeFilter === 'ethereum') {
+          filteredFallback = fallbackData.filter(crypto => 
+            crypto.id === 'ethereum' || 
+            crypto.id === 'base' || 
+            crypto.id === 'beacon' || 
+            crypto.id === 'arbitrum'
+          );
+        }
+        
+        setCryptoData(filteredFallback);
       }
     };
     
     fetchData();
     
-    // Set up a refresh interval (every 30 seconds)
-    const intervalId = setInterval(fetchData, 30000);
+    // Set up a refresh interval (every 30mins seconds for real API data)
+    const intervalId = setInterval(fetchData, 1800000);
     
     return () => clearInterval(intervalId);
   }, [activeFilter]);

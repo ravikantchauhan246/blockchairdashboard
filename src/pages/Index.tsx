@@ -2,6 +2,7 @@
 import { useState } from "react";
 import FilterTabs from "@/components/FilterTabs";
 import CryptoGrid from "@/components/CryptoGrid";
+import APIStatus from "@/components/APIStatus";
 import useCryptoData from "@/hooks/useCryptoData";
 import { useToast } from "@/hooks/use-toast";
 
@@ -9,12 +10,13 @@ const Index = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const { cryptoData, isLoading, error } = useCryptoData(activeFilter);
   const { toast } = useToast();
-
   // Available filters
   const filters = [
-    { id: "all", label: "All" },
-    { id: "bitcoin", label: "Bitcoin ecosystem" },
-    { id: "ethereum", label: "Ethereum ecosystem" },
+    { id: "all", label: "All Blockchains" },
+    { id: "bitcoin", label: "Bitcoin Family" },
+    { id: "ethereum", label: "Ethereum" },
+    { id: "defi", label: "Smart Contracts" },
+    { id: "privacy", label: "Privacy Coins" },
   ];
 
   // Show error toast if there's an error
@@ -27,16 +29,14 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient py-8 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient py-8 px-4 md:px-8">      <div className="max-w-7xl mx-auto">
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Blockchain Explorer
           </h1>
           <p className="text-gray-400">
             Real-time data from major cryptocurrency blockchains
-          </p>
-        </header>
+          </p>        </header>
 
         <FilterTabs
           activeFilter={activeFilter}
@@ -50,10 +50,22 @@ const Index = () => {
           </div>
         ) : (
           <CryptoGrid cryptocurrencies={cryptoData} isLoading={isLoading} />
-        )}
-
-        <footer className="mt-12 text-center text-gray-500 text-sm">
-          <p>Data provided by Blockchair API • Updated every 30 seconds</p>
+        )}        <footer className="mt-12 space-y-6">
+          {/* API Status Card */}
+          <div className="flex justify-center">
+            <APIStatus className="max-w-md" />
+          </div>
+          
+          {/* Footer Text */}
+          <div className="text-center text-gray-500 text-sm">
+            <p>Data provided by Blockchair API • Updated every 30 minutes</p>
+            <p className="mt-2 text-xs">
+              {import.meta.env.VITE_BLOCKCHAIR_API_KEY ? 
+                "✅ API Key configured - Premium features enabled" : 
+                "⚠️ No API key - Using free tier limits"
+              }
+            </p>
+          </div>
         </footer>
       </div>
     </div>
