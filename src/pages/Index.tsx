@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FilterTabs from "@/components/FilterTabs";
 import CryptoGrid from "@/components/CryptoGrid";
 import useCryptoData from "@/hooks/useCryptoData";
 import { useToast } from "@/hooks/use-toast";
 import { LineShadowText } from "@/components/magicui/line-shadow-text";
+import { scrollToTop } from "@/utils/scrollUtils";
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const { cryptoData, isLoading, error } = useCryptoData(activeFilter);
   const { toast } = useToast();
+  // Scroll to top when component mounts
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   // Available filters
   const filters = [

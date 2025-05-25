@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCryptoData } from '@/services/blockchairApi';
@@ -10,6 +10,7 @@ import { ArrowUp, ArrowDown, TrendingUp, Clock, Hash, DollarSign, Users, Activit
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { formatDistanceToNow } from 'date-fns';
 import CryptoIcon from '@/components/CryptoIcon';
+import { scrollToTop } from '@/utils/scrollUtils';
 
 // Map blockchain identifiers to display names
 const blockchainDisplayNames: { [key: string]: string } = {
@@ -52,6 +53,17 @@ const blockchainSymbols: { [key: string]: string } = {
 const BlockchainStats: React.FC = () => {
   const { blockchain } = useParams<{ blockchain: string }>();
   const navigate = useNavigate();
+  // Scroll to top when component mounts or blockchain changes
+  useEffect(() => {
+    // Use instant scroll for initial load, smooth for navigation
+    scrollToTop('auto');
+    // Small delay for smooth scroll to ensure page is rendered
+    const timer = setTimeout(() => {
+      scrollToTop('smooth');
+    }, 50);
+    
+    return () => clearTimeout(timer);
+  }, [blockchain]);
   
   if (!blockchain || !blockchainDisplayNames[blockchain]) {
     return <Navigate to="/404" replace />;
