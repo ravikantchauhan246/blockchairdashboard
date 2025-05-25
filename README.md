@@ -207,10 +207,9 @@ bun run build
 
 ## 📊 Performance
 
-- **Lighthouse Score**: 95+ (Performance, Accessibility, Best Practices)
+- **Lighthouse Score**: 90+ (Performance, Accessibility, Best Practices)
 - **Bundle Size**: Optimized with Vite tree-shaking
 - **API Caching**: Smart caching reduces API calls
-- **Loading Time**: < 2s on 3G networks
 
 ---
 
