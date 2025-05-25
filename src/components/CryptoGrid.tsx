@@ -49,21 +49,21 @@ const CryptoGrid: React.FC<CryptoGridProps> = ({ cryptocurrencies, isLoading }) 
             </div>
           </div>
         ))
-      ) : (
-        cryptocurrencies.map((crypto) => (
-          <CryptoCard
-            key={crypto.id}
-            name={crypto.name}
-            symbol={crypto.symbol}
-            price={crypto.price}
-            blockNumber={crypto.blockNumber}
-            blockTime={crypto.blockTime}
-            blockLabel={crypto.blockLabel}
-            fee={crypto.fee}
-            marketCap={crypto.marketCap}
-            change24h={crypto.change24h}
-            transactions24h={crypto.transactions24h}
-          />
+      ) : (        cryptocurrencies.map((crypto) => (
+          <div key={crypto.id} className="crypto-card-container">
+            <CryptoCard
+              name={crypto.name}
+              symbol={crypto.symbol}
+              price={crypto.price}
+              blockNumber={crypto.blockNumber}
+              blockTime={crypto.blockTime}
+              blockLabel={crypto.blockLabel}
+              fee={crypto.fee}
+              marketCap={crypto.marketCap}
+              change24h={crypto.change24h}
+              transactions24h={crypto.transactions24h}
+            />
+          </div>
         ))
       )}
     </div>
