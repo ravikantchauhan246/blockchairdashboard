@@ -60,11 +60,14 @@
   perspective: 1000px;
 }
 
-.crypto-card:hover {
-  transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
-              0 10px 25px rgba(16, 185, 129, 0.2);
-  filter: brightness(1.1) saturate(1.2);
+/* Only apply hover effects on medium screens and larger */
+@media (min-width: 768px) {
+  .crypto-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+                0 10px 25px rgba(16, 185, 129, 0.2);
+    filter: brightness(1.1) saturate(1.2);
+  }
 }
 
 .bg-gradient {

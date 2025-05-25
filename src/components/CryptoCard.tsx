@@ -123,7 +123,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
     return colors;
   };  const borderColors = getBorderBeamColors(name);    return (
     <div 
-      className="cursor-pointer transition-all duration-700 ease-out hover:scale-110"
+      className="cursor-pointer transition-all duration-700 ease-out md:hover:scale-110"
       onClick={handleCardClick}
       style={{ 
         transition: 'transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
