@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowUp, ArrowDown, TrendingUp, Clock, Hash, DollarSign, Users, Activity, Zap, Globe, ArrowLeft } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { formatDistanceToNow } from 'date-fns';
+import CryptoIcon from '@/components/CryptoIcon';
 
 // Map blockchain identifiers to display names
 const blockchainDisplayNames: { [key: string]: string } = {
@@ -166,12 +167,19 @@ const BlockchainStats: React.FC = () => {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
-            </Button>
-            <div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-1 sm:mb-2">
-                {displayName} <span className="text-muted-foreground">({symbol})</span>
-              </h1>
-              <p className="text-sm sm:text-base text-muted-foreground">Real-time blockchain statistics and analytics</p>
+            </Button>            <div className="flex items-center space-x-4">
+              <CryptoIcon 
+                name={displayName} 
+                symbol={symbol} 
+                size={48} 
+                className="flex-shrink-0"
+              />
+              <div>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-1 sm:mb-2">
+                  {displayName} <span className="text-muted-foreground">({symbol})</span>
+                </h1>
+                <p className="text-sm sm:text-base text-muted-foreground">Real-time blockchain statistics and analytics</p>
+              </div>
             </div>
           </div>
           <Badge variant="secondary" className="self-start sm:self-auto px-3 py-1">

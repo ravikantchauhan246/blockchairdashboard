@@ -56,12 +56,7 @@ const Index = () => {
           {/* Footer Text */}
           <div className="text-center text-gray-500 text-sm">
             <p>Data provided by Blockchair API • Updated every 30 minutes</p>
-            <p className="mt-2 text-xs">
-              {import.meta.env.VITE_BLOCKCHAIR_API_KEY ? 
-                "✅ API Key configured - Premium features enabled" : 
-                "⚠️ No API key - Using free tier limits"
-              }
-            </p>
+            
           </div>
         </footer>
       </div>
