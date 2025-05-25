@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import CryptoIcon from './CryptoIcon';
 
 interface CryptoCardProps {
   name: string;
@@ -132,9 +133,13 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
       <CardContainer className="inter-var w-full" containerClassName="py-1">
         <CardBody className={`crypto-card relative group/card rounded-xl p-4 ${gradientClass} text-white overflow-hidden border border-white/[0.1] hover:shadow-2xl hover:shadow-emerald-500/[0.1] w-full h-full transition-all duration-700`}>        <CardItem translateZ="100" rotateX={8} rotateY={8} className="flex items-center justify-between mb-3 transition-all duration-500 group-hover:translateZ-120">
           <div className="flex items-center">
-            <CardItem translateZ="120" rotateX={10} rotateY={10} className={`w-8 h-8 rounded-full flex items-center justify-center ${iconClass} bg-opacity-20 mr-2 transition-all duration-500 group-hover:translateZ-140 group-hover:rotateY-15`}>
-              {/* This is where you would put the icon, for now using the first letter */}
-              <span className="text-lg font-bold">{symbol.charAt(0)}</span>
+            <CardItem translateZ="120" rotateX={10} rotateY={10} className="mr-2 transition-all duration-500 group-hover:translateZ-140 group-hover:rotateY-15">
+              <CryptoIcon 
+                name={name} 
+                symbol={symbol} 
+                size={32} 
+                className="rounded-full shadow-lg"
+              />
             </CardItem>
             <div>
               <CardItem translateZ="100" rotateX={5} rotateY={5} as="h3" className="text-lg font-bold transition-all duration-500 group-hover:translateZ-120">{name}</CardItem>
