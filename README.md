@@ -193,15 +193,11 @@ bun run build
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ## 👨‍💻 Author
 
 **Ravikant Chauhan**
-- GitHub: [Your GitHub Profile]
-- Email: [Your Email]
+- GitHub: ravikantchauhan246
+- Email: chauhan@ravikant.dev
 
 ## 🙏 Acknowledgments
 
@@ -219,4 +215,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-Built with ❤️ by Ravikant Chauhan | Powered by React & Blockchain APIs
+Built with ❤️ by Ravikant Chauhan | Powered by React & Blockchair API
