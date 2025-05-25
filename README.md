@@ -1,8 +1,7 @@
-# 🔗 Blockchain Explorer - BlockSeer Data Glimpse
+# 🔗 Blockchain Explorer
 
 A modern, real-time blockchain data explorer built with React, TypeScript, and Tailwind CSS. This application provides an intuitive interface to explore blockchain data across multiple cryptocurrencies with beautiful 3D effects and animations.
 
-![Blockchain Explorer]
 
 ## ✨ Features
 
