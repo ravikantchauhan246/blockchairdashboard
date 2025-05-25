@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { fetchAllCryptoData, parseMultipleCryptoData } from '../services/blockchairApi';
 
 interface CryptoData {
@@ -92,99 +92,111 @@ const MOCK_DATA: CryptoData[] = [
   },
 ];
 
-export const useCryptoData = (activeFilter: string) => {
-  const [cryptoData, setCryptoData] = useState<CryptoData[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const filterCryptoData = (data: CryptoData[], filter: string): CryptoData[] => {
+  let filteredData = data;
   
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-        try {
+  if (filter === 'bitcoin') {
+    // Show Bitcoin and Bitcoin-like blockchains
+    filteredData = data.filter(crypto => 
+      ['bitcoin', 'bitcoin-cash', 'litecoin', 'dogecoin', 'dash', 'zcash', 
+       'ecash', 'groestlcoin'].includes(crypto.id)
+    );
+  } else if (filter === 'ethereum') {
+    // Show Ethereum (only Ethereum is available from Blockchair)
+    filteredData = data.filter(crypto => 
+      ['ethereum'].includes(crypto.id)
+    );
+  } else if (filter === 'defi') {
+    // Show DeFi and smart contract platforms
+    filteredData = data.filter(crypto => 
+      ['ethereum', 'cardano', 'polkadot', 'kusama'].includes(crypto.id)
+    );
+  } else if (filter === 'privacy') {
+    // Show privacy-focused cryptocurrencies
+    filteredData = data.filter(crypto => 
+      ['monero', 'zcash', 'dash'].includes(crypto.id)
+    );
+  } else if (filter === 'all') {
+    // Show all available cryptocurrencies - no filtering
+    filteredData = data;
+  } else {
+    // For any other filter, show all
+    filteredData = data;
+  }
+  
+  // Sort by market cap (descending) for better display order
+  return filteredData.sort((a, b) => {
+    // Handle cases where market cap might be undefined
+    const aMarketCap = a.marketCap || 0;
+    const bMarketCap = b.marketCap || 0;
+    if (aMarketCap === bMarketCap) {
+      // If market caps are equal, sort by price
+      return (b.price || 0) - (a.price || 0);
+    }
+    return bMarketCap - aMarketCap;
+  });
+};
+
+const getFallbackData = (filter: string): CryptoData[] => {
+  const fallbackData = MOCK_DATA.slice(0, 8); // Show fewer items as fallback
+  
+  if (filter === 'bitcoin') {
+    return fallbackData.filter(crypto => crypto.id === 'bitcoin' || crypto.id === 'bitcoin-cash');
+  } else if (filter === 'ethereum') {
+    return fallbackData.filter(crypto => 
+      crypto.id === 'ethereum' || 
+      crypto.id === 'base' || 
+      crypto.id === 'beacon' || 
+      crypto.id === 'arbitrum'
+    );
+  }
+  
+  return fallbackData;
+};
+
+export const useCryptoData = (activeFilter: string) => {
+  const {
+    data: cryptoData = [],
+    isLoading,
+    error,
+    isError
+  } = useQuery({
+    queryKey: ['cryptoData', activeFilter],
+    queryFn: async () => {
+      try {
+        console.log(`Fetching crypto data for filter: ${activeFilter}`);
         // Fetch real data from Blockchair API
         const results = await fetchAllCryptoData();
         const parsedData = parseMultipleCryptoData(results);
         
         // Apply filtering based on activeFilter
-        let filteredData = parsedData;
-          if (activeFilter === 'bitcoin') {
-          // Show Bitcoin and Bitcoin-like blockchains
-          filteredData = parsedData.filter(crypto => 
-            ['bitcoin', 'bitcoin-cash', 'litecoin', 'dogecoin', 'dash', 'zcash', 
-             'ecash', 'groestlcoin'].includes(crypto.id)
-          );
-        } else if (activeFilter === 'ethereum') {
-          // Show Ethereum (only Ethereum is available from Blockchair)
-          filteredData = parsedData.filter(crypto => 
-            ['ethereum'].includes(crypto.id)
-          );
-        } else if (activeFilter === 'defi') {
-          // Show DeFi and smart contract platforms
-          filteredData = parsedData.filter(crypto => 
-            ['ethereum', 'cardano', 'polkadot', 'kusama'].includes(crypto.id)
-          );
-        } else if (activeFilter === 'privacy') {
-          // Show privacy-focused cryptocurrencies
-          filteredData = parsedData.filter(crypto => 
-            ['monero', 'zcash', 'dash'].includes(crypto.id)
-          );
-        } else if (activeFilter === 'all') {
-          // Show all available cryptocurrencies - no filtering
-          filteredData = parsedData;
-        } else {
-          // For any other filter, show all
-          filteredData = parsedData;
-        }
-        
-        // Sort by market cap (descending) for better display order
-        filteredData.sort((a, b) => {
-          // Handle cases where market cap might be undefined
-          const aMarketCap = a.marketCap || 0;
-          const bMarketCap = b.marketCap || 0;
-          if (aMarketCap === bMarketCap) {
-            // If market caps are equal, sort by price
-            return (b.price || 0) - (a.price || 0);
-          }
-          return bMarketCap - aMarketCap;
-        });
+        const filteredData = filterCryptoData(parsedData, activeFilter);
         
         console.log(`Fetched ${filteredData.length} cryptocurrencies for filter: ${activeFilter}`);
-        setCryptoData(filteredData);
-        setIsLoading(false);
+        return filteredData;
       } catch (err) {
         console.error('Error fetching crypto data:', err);
-        setError('Failed to fetch cryptocurrency data. Please try again later.');
-        setIsLoading(false);
         
-        // Fallback to a subset of mock data if API fails
-        const fallbackData = MOCK_DATA.slice(0, 8); // Show fewer items as fallback
-        
-        let filteredFallback = fallbackData;
-        if (activeFilter === 'bitcoin') {
-          filteredFallback = fallbackData.filter(crypto => crypto.id === 'bitcoin' || crypto.id === 'bitcoin-cash');
-        } else if (activeFilter === 'ethereum') {
-          filteredFallback = fallbackData.filter(crypto => 
-            crypto.id === 'ethereum' || 
-            crypto.id === 'base' || 
-            crypto.id === 'beacon' || 
-            crypto.id === 'arbitrum'
-          );
-        }
-        
-        setCryptoData(filteredFallback);
+        // Return fallback data if API fails
+        const fallbackData = getFallbackData(activeFilter);
+        console.log(`Using fallback data: ${fallbackData.length} items for filter: ${activeFilter}`);
+        return fallbackData;
       }
-    };
-    
-    fetchData();
-    
-    // Set up a refresh interval (every 30mins seconds for real API data)
-    const intervalId = setInterval(fetchData, 1800000);
-    
-    return () => clearInterval(intervalId);
-  }, [activeFilter]);
-  
-  return { cryptoData, isLoading, error };
+    },
+    // This queryKey will change when activeFilter changes, causing a refetch
+    // Data will be cached per filter type
+    staleTime: 30 * 60 * 1000, // 30 minutes - data is fresh for 30 min
+    gcTime: 60 * 60 * 1000, // 1 hour - keep in cache for 1 hour
+    retry: 2,
+    refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    refetchInterval: 30 * 60 * 1000, // Background refetch every 30 minutes
+  });
+
+  return { 
+    cryptoData, 
+    isLoading, 
+    error: isError ? (error as Error)?.message || 'Failed to fetch cryptocurrency data. Please try again later.' : null 
+  };
 };
 
 export default useCryptoData;

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import FilterTabs from "@/components/FilterTabs";
 import CryptoGrid from "@/components/CryptoGrid";
-import APIStatus from "@/components/APIStatus";
 import useCryptoData from "@/hooks/useCryptoData";
 import { useToast } from "@/hooks/use-toast";
 import { LineShadowText } from "@/components/magicui/line-shadow-text";
@@ -53,14 +52,7 @@ const Index = () => {
           </div>
         ) : (
           <CryptoGrid cryptocurrencies={cryptoData} isLoading={isLoading} />
-        )}
-
-        <footer className="mt-12 space-y-6">
-          {/* API Status Card */}
-          <div className="flex justify-center">
-            <APIStatus className="max-w-md" />
-          </div>
-          
+        )}        <footer className="mt-12 space-y-6">
           {/* Footer Text */}
           <div className="text-center text-gray-500 text-sm">
             <p>Data provided by Blockchair API • Updated every 30 minutes</p>

@@ -7,7 +7,26 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import BlockchainStats from "./pages/BlockchainStats";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Cache data for 30 minutes
+      staleTime: 30 * 60 * 1000, // 30 minutes
+      // Keep data in cache for 1 hour
+      gcTime: 60 * 60 * 1000, // 1 hour
+      // Retry failed requests
+      retry: 2,
+      // Don't refetch on window focus to save API calls
+      refetchOnWindowFocus: false,
+      // Don't refetch on reconnect unless data is really stale
+      refetchOnReconnect: 'always',
+      // Background refetch interval - every 30 minutes
+      refetchInterval: 30 * 60 * 1000, // 30 minutes
+      // Only background refetch when window is focused
+      refetchIntervalInBackground: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
