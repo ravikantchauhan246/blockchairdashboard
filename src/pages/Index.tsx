@@ -1,11 +1,7 @@
-
 import { useState } from "react";
 import FilterTabs from "@/components/FilterTabs";
 import CryptoGrid from "@/components/CryptoGrid";
-<<<<<<< HEAD
 import APIStatus from "@/components/APIStatus";
-=======
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
 import useCryptoData from "@/hooks/useCryptoData";
 import { useToast } from "@/hooks/use-toast";
 
@@ -13,7 +9,7 @@ const Index = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const { cryptoData, isLoading, error } = useCryptoData(activeFilter);
   const { toast } = useToast();
-<<<<<<< HEAD
+
   // Available filters
   const filters = [
     { id: "all", label: "All Blockchains" },
@@ -21,14 +17,6 @@ const Index = () => {
     { id: "ethereum", label: "Ethereum" },
     { id: "defi", label: "Smart Contracts" },
     { id: "privacy", label: "Privacy Coins" },
-=======
-
-  // Available filters
-  const filters = [
-    { id: "all", label: "All" },
-    { id: "bitcoin", label: "Bitcoin ecosystem" },
-    { id: "ethereum", label: "Ethereum ecosystem" },
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
   ];
 
   // Show error toast if there's an error
@@ -41,24 +29,16 @@ const Index = () => {
   }
 
   return (
-<<<<<<< HEAD
-    <div className="min-h-screen bg-gradient py-8 px-4 md:px-8">      <div className="max-w-7xl mx-auto">
-=======
     <div className="min-h-screen bg-gradient py-8 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Blockchain Explorer
           </h1>
           <p className="text-gray-400">
             Real-time data from major cryptocurrency blockchains
-<<<<<<< HEAD
-          </p>        </header>
-=======
           </p>
         </header>
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
 
         <FilterTabs
           activeFilter={activeFilter}
@@ -72,8 +52,9 @@ const Index = () => {
           </div>
         ) : (
           <CryptoGrid cryptocurrencies={cryptoData} isLoading={isLoading} />
-<<<<<<< HEAD
-        )}        <footer className="mt-12 space-y-6">
+        )}
+
+        <footer className="mt-12 space-y-6">
           {/* API Status Card */}
           <div className="flex justify-center">
             <APIStatus className="max-w-md" />
@@ -89,12 +70,6 @@ const Index = () => {
               }
             </p>
           </div>
-=======
-        )}
-
-        <footer className="mt-12 text-center text-gray-500 text-sm">
-          <p>Data provided by Blockchair API • Updated every 30 seconds</p>
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
         </footer>
       </div>
     </div>

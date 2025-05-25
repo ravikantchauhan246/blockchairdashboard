@@ -1,10 +1,5 @@
-
 import { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import { fetchAllCryptoData, parseMultipleCryptoData } from '../services/blockchairApi';
-=======
-import { fetchAllCryptoData, parseCryptoData } from '../services/blockchairApi';
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
 
 interface CryptoData {
   id: string;
@@ -13,7 +8,6 @@ interface CryptoData {
   price: number;
   blockNumber: number;
   blockTime: Date;
-<<<<<<< HEAD
   blockLabel?: string;
   fee: number;
   marketCap?: number;
@@ -21,9 +15,6 @@ interface CryptoData {
   change24h?: number;
   volume24h?: number;
   transactions24h?: number;
-=======
-  fee: number;
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
 }
 
 const MOCK_DATA: CryptoData[] = [
@@ -110,7 +101,6 @@ export const useCryptoData = (activeFilter: string) => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-<<<<<<< HEAD
         try {
         // Fetch real data from Blockchair API
         const results = await fetchAllCryptoData();
@@ -162,39 +152,10 @@ export const useCryptoData = (activeFilter: string) => {
         console.log(`Fetched ${filteredData.length} cryptocurrencies for filter: ${activeFilter}`);
         setCryptoData(filteredData);
         setIsLoading(false);
-=======
-      
-      try {
-        // For now, we'll use mock data to match the design
-        // In a production app, we would use the API data
-        // const results = await fetchAllCryptoData();
-        // const parsedData = results.map(parseCryptoData).filter(Boolean);
-        // setCryptoData(parsedData);
-        
-        // Using mock data for demo purposes
-        setTimeout(() => {
-          // Filter the mock data based on activeFilter
-          let filteredData = MOCK_DATA;
-          if (activeFilter === 'bitcoin') {
-            filteredData = MOCK_DATA.filter(crypto => crypto.id === 'bitcoin' || crypto.id === 'bitcoin-cash');
-          } else if (activeFilter === 'ethereum') {
-            filteredData = MOCK_DATA.filter(crypto => 
-              crypto.id === 'ethereum' || 
-              crypto.id === 'base' || 
-              crypto.id === 'beacon' || 
-              crypto.id === 'arbitrum'
-            );
-          }
-          
-          setCryptoData(filteredData);
-          setIsLoading(false);
-        }, 1000); // Simulate API delay
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
       } catch (err) {
         console.error('Error fetching crypto data:', err);
         setError('Failed to fetch cryptocurrency data. Please try again later.');
         setIsLoading(false);
-<<<<<<< HEAD
         
         // Fallback to a subset of mock data if API fails
         const fallbackData = MOCK_DATA.slice(0, 8); // Show fewer items as fallback
@@ -212,20 +173,13 @@ export const useCryptoData = (activeFilter: string) => {
         }
         
         setCryptoData(filteredFallback);
-=======
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
       }
     };
     
     fetchData();
     
-<<<<<<< HEAD
     // Set up a refresh interval (every 30mins seconds for real API data)
     const intervalId = setInterval(fetchData, 1800000);
-=======
-    // Set up a refresh interval (every 30 seconds)
-    const intervalId = setInterval(fetchData, 30000);
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
     
     return () => clearInterval(intervalId);
   }, [activeFilter]);

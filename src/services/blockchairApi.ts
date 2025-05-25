@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { retryWithBackoff, createAPIError, cachedFetch } from '../utils/apiUtils';
 
 const BASE_URL = 'https://api.blockchair.com';
@@ -114,27 +113,6 @@ export const fetchIndividualCryptoData = async () => {
   ];
   
   const promises = priorityCurrencies.map(currency => fetchCryptoData(currency));
-=======
-
-const BASE_URL = 'https://api.blockchair.com';
-
-export const fetchCryptoData = async (currency: string) => {
-  try {
-    const response = await fetch(`${BASE_URL}/${currency}/stats`);
-    if (!response.ok) {
-      throw new Error(`Error fetching ${currency} data`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(`Failed to fetch ${currency} data:`, error);
-    throw error;
-  }
-};
-
-export const fetchAllCryptoData = async () => {
-  const currencies = ['bitcoin', 'ethereum', 'bitcoin-cash', 'litecoin'];
-  const promises = currencies.map(currency => fetchCryptoData(currency));
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
   
   try {
     const results = await Promise.allSettled(promises);
@@ -144,11 +122,7 @@ export const fetchAllCryptoData = async () => {
     
     return successfulResults;
   } catch (error) {
-<<<<<<< HEAD
     console.error('Failed to fetch individual crypto data:', error);
-=======
-    console.error('Failed to fetch all crypto data:', error);
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
     throw error;
   }
 };
@@ -162,7 +136,6 @@ export const parseCryptoData = (apiData: any) => {
   const data = apiData.data;
   const currency = Object.keys(data)[0];
   const stats = data[currency];
-<<<<<<< HEAD
   // Map from currency names to more user-friendly display names
   // Updated to only include blockchains actually supported by Blockchair API
   const currencyDisplayNames: { [key: string]: string } = {
@@ -181,21 +154,11 @@ export const parseCryptoData = (apiData: any) => {
     'ripple': 'XRP Ledger',
     'stellar': 'Stellar',
     'zcash': 'Zcash'
-=======
-  
-  // Map from currency names to more user-friendly display names
-  const currencyDisplayNames: { [key: string]: string } = {
-    'bitcoin': 'Bitcoin',
-    'ethereum': 'Ethereum',
-    'bitcoin-cash': 'Bitcoin Cash',
-    'litecoin': 'Litecoin',
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
   };
   
   // Map from currency names to their symbols
   const currencySymbols: { [key: string]: string } = {
     'bitcoin': 'BTC',
-<<<<<<< HEAD
     'bitcoin-cash': 'BCH',
     'cardano': 'ADA',
     'dash': 'DASH',
@@ -522,20 +485,3 @@ export const fetchAPIUsageStats = async () => {
     }
   }, 2);
 };
-=======
-    'ethereum': 'ETH',
-    'bitcoin-cash': 'BCH',
-    'litecoin': 'LTC',
-  };
-  
-  return {
-    id: currency,
-    name: currencyDisplayNames[currency] || currency,
-    symbol: currencySymbols[currency] || currency.toUpperCase(),
-    price: stats.market_price_usd,
-    blockNumber: stats.blocks,
-    blockTime: new Date(stats.best_block_time * 1000), // Convert Unix timestamp to Date
-    fee: stats.average_transaction_fee_usd || stats.suggested_transaction_fee_usd || 0,
-  };
-};
->>>>>>> 071fe3259dace8ee73ba64b0c48435bf2271b5b6
